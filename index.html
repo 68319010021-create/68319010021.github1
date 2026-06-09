@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Register Form Example</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f7f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    width: 400px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+input[type=text], 
+input[type=password],
+input[type=email],
+select,
+textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+input[type=radio],
+input[type=checkbox] {
+    margin-right: 10px;
+}
+
+label {
+    font-weight: bold;
+    color: #555;
+}
+
+button[type=submit] {
+    background-color: #2196F3;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+button[type=submit]:hover {
+    background-color: #0b7dda;
+}
+
+/* Error message style */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: -15px;
+    margin-bottom: 15px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>สมัครสมาชิก</h2>
+  <form id="registerForm">
+
+    <!-- Text Box -->
+    <label for="username">ชื่อผู้ใช้:</label>
+    <input type="text" id="username" name="username" placeholder="กรอกชื่อผู้ใช้">
+    <div id="usernameError" class="error"></div>
+
+    <!-- Password -->
+    <label for="password">รหัสผ่าน:</label>
+    <input type="password" id="password" name="password" placeholder="กรอกรหัสผ่าน">
+    <div id="passwordError" class="error"></div>
+
+    <!-- Email -->
+    <label for="email">อีเมล:</label>
+    <input type="email" id="email" name="email" placeholder="กรอกอีเมล">
+    <div id="emailError" class="error"></div>
+
+    <!-- Radio Button -->
+    <label>เพศ:</label><br>
+    <input type="radio" name="gender" value="ชาย"> ชาย
+    <input type="radio" name="gender" value="หญิง"> หญิง
+    <div id="genderError" class="error"></div>
+
+    <!-- Checkbox -->
+    <label>
+      <input type="checkbox" id="agree" name="agree"> ยอมรับเงื่อนไข
+    </label>
+    <div id="agreeError" class="error"></div>
+
+    <!-- Select -->
+    <label for="country">ประเทศ:</label>
+    <select id="country" name="country">
+      <option value="">--เลือกประเทศ--</option>
+      <option value="thailand">ไทย</option>
+      <option value="usa">สหรัฐอเมริกา</option>
+      <option value="japan">ญี่ปุ่น</option>
+    </select>
+    <div id="countryError" class="error"></div>
+
+    <!-- Textarea -->
+    <label for="bio">แนะนำตัว:</label>
+    <textarea id="bio" name="bio" placeholder="เขียนเกี่ยวกับตัวคุณ..." rows="4"></textarea>
+
+    <!-- Submit -->
+    <button type="submit">สมัครสมาชิก</button>
+  </form>
+</div>
+
+<script>
+// Validation
+document.getElementById("registerForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    // Clear previous errors
+    document.querySelectorAll(".error").forEach(el => el.textContent = "");
+
+    let valid = true;
+
+    // Username validation
+    let username = document.getElementById("username").value.trim();
+    if(username === ""){
+        document.getElementById("usernameError").textContent = "กรุณากรอกชื่อผู้ใช้";
+        valid = false;
+    } else if(username.length < 4){
+        document.getElementById("usernameError").textContent = "ชื่อผู้ใช้ต้องมีอย่างน้อย 4 ตัวอักษร";
+        valid = false;
+    }
+
+    // Password validation
+    let password = document.getElementById("password").value;
+    if(password === ""){
+        document.getElementById("passwordError").textContent = "กรุณากรอกรหัสผ่าน";
+        valid = false;
+    } else if(password.length < 6){
+        document.getElementById("passwordError").textContent = "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
+        valid = false;
+    }
+
+    // Email validation
+    let email = document.getElementById("email").value;
+    if(email === ""){
+        document.getElementById("emailError").textContent = "กรุณากรอกอีเมล";
+        valid = false;
+    } else if(!email.includes("@")){
+        document.getElementById("emailError").textContent = "กรุณากรอกอีเมลให้ถูกต้อง";
+        valid = false;
+    }
+
+    // Gender validation
+    let genderChecked = document.querySelector('input[name="gender"]:checked');
+    if(!genderChecked){
+        document.getElementById("genderError").textContent = "กรุณาเลือกเพศ";
+        valid = false;
+    }
+
+    // Checkbox validation
+    if(!document.getElementById("agree").checked){
+        document.getElementById("agreeError").textContent = "คุณต้องยอมรับเงื่อนไข";
+        valid = false;
+    }
+
+    // Country validation
+    if(document.getElementById("country").value === ""){
+        document.getElementById("countryError").textContent = "กรุณาเลือกประเทศ";
+        valid = false;
+    }
+
+    if(valid){
+        alert("สมัครสมาชิกเรียบร้อย!");
+        this.reset();
+    }
+});
+</script>
+
+</body>
+</html>
